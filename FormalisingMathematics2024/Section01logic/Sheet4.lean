@@ -17,8 +17,9 @@ We learn about how to manipulate `P ∧ Q` in Lean.
 You'll need to know about the tactics from the previous sheets,
 and also the following tactics:
 
-* `cases'`
+* `rcases'`
 * `constructor`
+* `rintro`
 
 -/
 
@@ -26,39 +27,64 @@ and also the following tactics:
 variable (P Q R : Prop)
 
 example : P ∧ Q → P := by
-  sorry
+  rintro ⟨p, q⟩
+  exact p
   done
 
 example : P ∧ Q → Q := by
-  sorry
+  rintro ⟨p, q⟩
+  exact q
   done
 
 example : (P → Q → R) → P ∧ Q → R := by
-  sorry
+  rintro pqr ⟨p, q⟩
+  apply pqr
+  exact p
+  exact q
   done
 
 example : P → Q → P ∧ Q := by
-  sorry
+  intro p q
+  constructor
+  exact p
+  exact q
   done
 
 /-- `∧` is symmetric -/
 example : P ∧ Q → Q ∧ P := by
-  sorry
+  rintro ⟨p, q⟩
+  constructor
+  exact q
+  exact p
   done
 
 example : P → P ∧ True := by
-  sorry
+  intro p
+  constructor
+  exact p
+  triv
   done
 
 example : False → P ∧ False := by
-  sorry
+  intro f
+  constructor
+  · exfalso
+    exact f
+  · exact f
   done
 
 /-- `∧` is transitive -/
 example : P ∧ Q → Q ∧ R → P ∧ R := by
-  sorry
+  rintro ⟨p, q⟩ ⟨q, r⟩
+  constructor
+  exact p
+  exact r
   done
 
 example : (P ∧ Q → R) → P → Q → R := by
-  sorry
+  intro pqr p q
+  apply pqr
+  constructor
+  exact p
+  exact q
   done

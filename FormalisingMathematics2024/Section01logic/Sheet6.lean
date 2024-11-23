@@ -18,7 +18,7 @@ You'll need to know about the tactics from the previous sheets,
 and also the following tactics
 
 * `left` and `right`
-* `cases'` (new functionality)
+* `rcases'` (new functionality)
 
 -/
 
@@ -27,20 +27,33 @@ and also the following tactics
 variable (P Q R S : Prop)
 
 example : P → P ∨ Q := by
-  sorry
+  intro p
+  left
+  exact p
   done
 
 example : Q → P ∨ Q := by
-  sorry
+  intro q
+  right
+  exact q
   done
 
 example : P ∨ Q → (P → R) → (Q → R) → R := by
-  sorry
+  intro pq pr qr
+  rcases pq with (p | q)
+  · apply pr
+    exact p
+  · apply qr
+    exact q
   done
 
 -- symmetry of `or`
 example : P ∨ Q → Q ∨ P := by
-  sorry
+  rintro (p | q)
+  · right
+    exact p
+  · left
+    exact q
   done
 
 -- associativity of `or`

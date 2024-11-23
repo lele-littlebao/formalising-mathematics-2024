@@ -28,41 +28,59 @@ if you can understand what's going on.
 variable (P Q R : Prop)
 
 example : True := by
-  sorry
+  triv
   done
 
 example : True → True := by
-  sorry
+  intro _
+  triv
   done
 
 example : False → True := by
-  sorry
+  intro _
+  triv
   done
 
 example : False → False := by
-  sorry
+  intro p
+  exfalso
+  exact p
   done
 
 example : (True → False) → False := by
-  sorry
+  intro p
+  apply p
+  triv
   done
 
 example : False → P := by
-  sorry
+  intro h
+  exfalso
+  exact h
   done
 
 example : True → False → True → False → True → False := by
-  sorry
+  intro t1 f2 t3 f4 t5
+  exact f2
   done
 
 example : P → (P → False) → False := by
-  sorry
+  intro p pf
+  apply pf
+  exact p
   done
 
 example : (P → False) → P → Q := by
-  sorry
+  intro pf p
+-- 因为 h1 : P → False 和 h2 : P 逻辑上是互相矛盾的，我们可以通过它们推导出 False，从而使用 exfalso。
+  exfalso
+  exact pf p
   done
 
 example : (True → False) → P := by
-  sorry
+  intro tf
+-- 将当前的目标（证明 P）转化为证明 False
+  exfalso
+  apply tf
+  triv
   done

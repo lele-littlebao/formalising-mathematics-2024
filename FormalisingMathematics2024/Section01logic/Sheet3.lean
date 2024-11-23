@@ -26,52 +26,97 @@ and the following tactics may also be useful:
 * `change`
 * `by_contra`
 * `by_cases`
+* `rfl`-- 一般用来证明等式
+* `iff.rfl`-- exact iff.rfl 一般用来证明等价命题
 
 -/
 
 -- Throughout this sheet, `P`, `Q` and `R` will denote propositions.
 variable (P Q R : Prop)
 
+example : ¬P ↔ P → False := by
+  change ¬ P ↔ ¬ P
+  exact Iff.rfl
+  done
+
 example : ¬True → False := by
-  sorry
+  intro ft
+  change True → False at ft
+  apply ft
+  triv
   done
 
 example : False → ¬True := by
-  sorry
+  intro f
+  exfalso
+  exact f
   done
 
 example : ¬False → True := by
-  sorry
+  intro nf
+  triv
   done
 
 example : True → ¬False := by
-  sorry
+  --change改写时直接改写目标
+  intro t
+  change False → False
+  intro f
+  exfalso
+  exact f
   done
 
 example : False → ¬P := by
-  sorry
+  intro f
+  exfalso
+  exact f
   done
 
 example : P → ¬P → False := by
-  sorry
+  intro hp np
+  exact np hp
   done
 
 example : P → ¬¬P := by
-  sorry
+  -- 注意逻辑上的矛盾
+  intro hp
+  -- 注意change的使用
+  change ¬P → False
+  -- 直接用¬P → False替换¬¬P
+  intro np
+  exact np hp
   done
 
 example : (P → Q) → ¬Q → ¬P := by
-  sorry
+  intro pq nq p
+  apply pq at p
+  exact nq p
   done
 
 example : ¬¬False → False := by
-  sorry
+  intro nnf
+  by_contra nf
+  exact nnf nf
   done
 
 example : ¬¬P → P := by
-  sorry
+  -- 反证法
+  intro nnp
+  by_contra np
+  exact nnp np
   done
 
 example : (¬Q → ¬P) → P → Q := by
-  sorry
+  intro nqnp hp
+  by_cases h:Q
+  -- 假设Q为真
+  · exact h
+  -- 假设Q为假
+  · apply nqnp at h
+    -- nqnp假设更新为¬P
+    -- 当前目标依然是 Q。
+    -- Lean 并不会自动推断出可以利用矛盾 h : ¬P 和 hp : P 来完成证明，除非你明确指出这一点。
+    -- exfalso 的作用：让目标从 Q 转变为 False。注意exalso的用途
+    exfalso
+    exact h hp
   done

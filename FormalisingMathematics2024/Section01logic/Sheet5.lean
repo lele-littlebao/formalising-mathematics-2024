@@ -18,22 +18,31 @@ and also the following two new tactics:
 
 * `rfl`
 * `rw`
-
+* `apply Iff.intro`
 -/
 
 
 variable (P Q R S : Prop)
 
 example : P ↔ P := by
-  sorry
+  rfl
   done
 
 example : (P ↔ Q) → (Q ↔ P) := by
-  sorry
+  intro pq
+  exact pq.symm
+  --rw [pq]
+  -- 通过重写策略，将P ↔ Q 转换为 Q ↔ P
+  -- exact pq.symm
   done
 
 example : (P ↔ Q) ↔ (Q ↔ P) := by
-  sorry
+  apply Iff.intro
+  -- apply Iff.intro 用来拆分目标为两个方向的证明
+  · intro pq
+    exact pq.symm
+  · intro qp
+    exact qp.symm
   done
 
 example : (P ↔ Q) → (Q ↔ R) → (P ↔ R) := by
